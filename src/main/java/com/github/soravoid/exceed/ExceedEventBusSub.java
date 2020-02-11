@@ -21,10 +21,6 @@ import org.apache.logging.log4j.Logger;
 @Mod.EventBusSubscriber(modid = Exceed.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ExceedEventBusSub
 {
-    public static final Logger LOG = LogManager.getLogger(Exceed.MODID + "_EVENTBUS");
-
-    private static final ResourceLocation SMITH_QUAL_RESOURCE = new ResourceLocation(Exceed.MODID, "smith_quality");
-    private static final ResourceLocation CHARGES_RESOURCE = new ResourceLocation(Exceed.MODID, "charges");
 
     @SubscribeEvent
     public static void onRegisterItem(RegistryEvent.Register<Item> e)
@@ -34,13 +30,6 @@ public class ExceedEventBusSub
             final BlockItem blockItem = new BlockItem(block, properties);
             e.getRegistry().register(setup(blockItem, block.getRegistryName()));
         });
-    }
-
-    @SubscribeEvent
-    public static void onAttachItems(AttachCapabilitiesEvent<ItemStack> e)
-    {
-        if(e.getObject().getItem() instanceof IExceedTool) e.addCapability(SMITH_QUAL_RESOURCE, new SmithQualityCapability());
-        if(e.getObject().getItem() instanceof IChargeable) e.addCapability(CHARGES_RESOURCE, new ChargesCapability());
     }
 
     public static <T extends IForgeRegistryEntry<T>> T setup(final T entry, final String name) {

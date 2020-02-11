@@ -9,6 +9,7 @@ import com.github.soravoid.exceed.capabilities.interfaces.ISmithQuality;
 import com.github.soravoid.exceed.init.ExceedBlocks;
 import com.github.soravoid.exceed.init.ExceedItemGroups;
 import com.github.soravoid.exceed.init.ExceedItems;
+import com.github.soravoid.exceed.network.ExceedPacketHandler;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -38,6 +39,7 @@ public class Exceed
 
     private void onCommonSetup(FMLCommonSetupEvent e)
     {
+        ExceedPacketHandler.init();
         CapabilityManager.INSTANCE.register(ISmithQuality.class, new SmithQualityCapability.Storage(), SmithQualityInstance::new);
         CapabilityManager.INSTANCE.register(ICharges.class, new ChargesCapability.Storage(), ChargesInstance::new);
     }
