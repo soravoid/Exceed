@@ -50,7 +50,7 @@ public class StaticElectricitySword extends ExceedSword implements IChargeable
                 World world = target.getEntityWorld();
                 double yVal = target.getPosY();
                 // TODO Find a better way to check for a solid block
-                while(!world.getBlockState(new BlockPos(target.getPosX(), yVal, target.getPosZ())).isAir()) yVal -= 1;
+                while(world.getBlockState(new BlockPos(target.getPosX(), yVal, target.getPosZ())).isAir()) yVal -= 1;
                 LightningBoltEntity bolt = new LightningBoltEntity(target.getEntityWorld(), target.getPosX(), yVal, target.getPosZ(), false);
                 world.addEntity(bolt);
                 cap.discharge();

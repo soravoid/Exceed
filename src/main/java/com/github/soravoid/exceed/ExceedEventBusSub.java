@@ -7,6 +7,7 @@ import com.github.soravoid.exceed.items.IExceedTool;
 import com.github.soravoid.exceed.items.weapons.IChargeable;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -36,10 +37,10 @@ public class ExceedEventBusSub
     }
 
     @SubscribeEvent
-    public static void onAttachItems(AttachCapabilitiesEvent<Item> e)
+    public static void onAttachItems(AttachCapabilitiesEvent<ItemStack> e)
     {
-        if(e.getObject() instanceof IExceedTool) e.addCapability(SMITH_QUAL_RESOURCE, new SmithQualityCapability());
-        if(e.getObject() instanceof IChargeable) e.addCapability(CHARGES_RESOURCE, new ChargesCapability());
+        if(e.getObject().getItem() instanceof IExceedTool) e.addCapability(SMITH_QUAL_RESOURCE, new SmithQualityCapability());
+        if(e.getObject().getItem() instanceof IChargeable) e.addCapability(CHARGES_RESOURCE, new ChargesCapability());
     }
 
     public static <T extends IForgeRegistryEntry<T>> T setup(final T entry, final String name) {
