@@ -34,7 +34,8 @@ public class ExceedSword extends SwordItem implements IExceedTool
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        ISmithQuality cap = stack.getCapability(SmithQualityCapability.SMITH_QUALITY_CAPABILITY).orElse(null);
-        if(cap != null) tooltip.add(new StringTextComponent(String.format("Quality: %s", cap.getQuality().getName())));
+        stack.getCapability(SmithQualityCapability.SMITH_QUALITY_CAPABILITY).ifPresent(cap -> {
+            tooltip.add(new StringTextComponent(String.format("Quality: %s", cap.getQuality().getName())));
+        });
     }
 }

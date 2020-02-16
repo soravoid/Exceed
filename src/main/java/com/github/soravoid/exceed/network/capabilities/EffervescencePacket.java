@@ -39,8 +39,10 @@ public class EffervescencePacket
         {
             ctx.get().enqueueWork(() -> {
                 ClientPlayerEntity player = Minecraft.getInstance().player;
-                IEffervescence cap = player.getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).orElse(null);
-                if(cap != null) cap.setEffervescencesSilent(pkt.maxEffervescence, pkt.effervescence);
+                player.getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).ifPresent(cap -> {
+                    cap.setEffervescencesSilent(pkt.maxEffervescence, pkt.effervescence);
+                    cap.setPlayer(player);
+                });
             });
             ctx.get().setPacketHandled(true);
         }

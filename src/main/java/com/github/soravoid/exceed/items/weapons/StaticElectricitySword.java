@@ -31,11 +31,8 @@ public class StaticElectricitySword extends ExceedSword implements IChargeable
         //TODO Adjust damage and speed values, these are placeholders from Items.DIAMOND_SWORD
         super(ExceedTiers.EXCEED, 3, -3.2f, new Item.Properties().group(Exceed.EXCEED_TAB));
 
-        this.addPropertyOverride(new ResourceLocation(Exceed.MODID, "charges"), (stack, world, entity) -> {
-            ICharges cap = stack.getCapability(ChargesCapability.CHARGES_CAPABILITY).orElse(null);
-            if(cap != null) return cap.getCharges();
-            return 0;
-        });
+        this.addPropertyOverride(new ResourceLocation(Exceed.MODID, "charges"), (stack, world, entity) ->
+                stack.getCapability(ChargesCapability.CHARGES_CAPABILITY).map(cap -> cap.getCharges()).orElse(0));
     }
 
     @SubscribeEvent
@@ -46,9 +43,7 @@ public class StaticElectricitySword extends ExceedSword implements IChargeable
         {
             if(e.getPlayer().getCooledAttackStrength(0) == 1.0f)
             {
-                ICharges cap = stack.getCapability(ChargesCapability.CHARGES_CAPABILITY).orElse(null);
-                if(cap != null)
-                {
+                stack.getCapability(ChargesCapability.CHARGES_CAPABILITY).ifPresent(cap -> {
                     if(cap.getCharges() < 3)
                     {
                         cap.addCharges(1);
@@ -75,7 +70,7 @@ public class StaticElectricitySword extends ExceedSword implements IChargeable
                             }
                         }
                     }
-                }
+                });
             }
         }
     }

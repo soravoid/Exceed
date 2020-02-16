@@ -48,8 +48,9 @@ public class ExceedForgeBusSub
     {
         if(e.getObject().getEntity() instanceof PlayerEntity) e.addCapability(EFFERVESCENCE_RESOURCE, new EffervescenceCapability());
 
-        IEffervescence cap1 = e.getObject().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).orElse(null);
-        if(cap1 != null) cap1.setPlayer((PlayerEntity) e.getObject());
+        e.getObject().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).ifPresent(cap -> {
+            cap.setPlayer((PlayerEntity) e.getObject());
+        });
     }
 
     @SubscribeEvent
@@ -68,17 +69,18 @@ public class ExceedForgeBusSub
     @SubscribeEvent
     public static void onEffervescenceChanged(ExceedEvents.EffervescenceChangedEvent e)
     {
-        IEffervescence cap = e.player.getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).orElse(null);
-        if(cap != null) ExceedPacketHandler.INSTANCE.sendTo(new EffervescencePacket(cap.getMaxEffervescence(), cap.getEffervescence()), ((ServerPlayerEntity)e.player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-        cap.setPlayer(e.player);
-        RenderEffervescenceBar.timeSinceLastUpdate = 0;
+        e.player.getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).ifPresent(cap -> {
+            ExceedPacketHandler.INSTANCE.sendTo(new EffervescencePacket(cap.getMaxEffervescence(), cap.getEffervescence()), ((ServerPlayerEntity)e.player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+            cap.setPlayer(e.player);
+        });
     }
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent e)
     {
-        IEffervescence cap = e.getPlayer().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).orElse(null);
-        if(cap != null) ExceedPacketHandler.INSTANCE.sendTo(new EffervescencePacket(cap.getMaxEffervescence(), cap.getEffervescence()), ((ServerPlayerEntity)e.getPlayer()).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        e.getPlayer().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).ifPresent(cap -> {
+            ExceedPacketHandler.INSTANCE.sendTo(new EffervescencePacket(cap.getMaxEffervescence(), cap.getEffervescence()), ((ServerPlayerEntity)e.getPlayer()).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+        });
         RenderEffervescenceBar.timeSinceLastUpdate = 0;
     }
 
@@ -87,13 +89,13 @@ public class ExceedForgeBusSub
     {
         if(e.isWasDeath())
         {
-            IEffervescence cap1 = e.getOriginal().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).orElse(null);
-            IEffervescence cap2 = e.getEntity().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).orElse(null);
-            if(cap1 != null && cap2 != null)
-            {
-                cap2.setEffervescencesSilent(cap1.getMaxEffervescence(), cap1.getMaxEffervescence());
-                cap2.setPlayer(e.getPlayer());
-            }
+            e.getOriginal().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).ifPresent(cap1 -> {
+                e.getPlayer().getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).ifPresent(cap2 -> {
+                    cap2.setEffervescencesSilent(cap1.getMaxEffervescence(), cap1.getMaxEffervescence());
+                    cap2.setPlayer(e.getPlayer());
+                    ExceedPacketHandler.INSTANCE.sendTo(new EffervescencePacket(cap1.getMaxEffervescence(), cap1.getMaxEffervescence()), ((ServerPlayerEntity)e.getPlayer()).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+                });
+            });
         }
     }
 }

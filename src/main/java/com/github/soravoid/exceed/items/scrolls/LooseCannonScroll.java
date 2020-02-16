@@ -11,8 +11,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class LooseCannonScroll extends Item
 {
@@ -24,16 +22,17 @@ public class LooseCannonScroll extends Item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        IEffervescence cap = player.getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).orElse(null);
-        Exceed.LOG.info(cap);
-        if(cap != null)
-        {
+        return player.getCapability(EffervescenceCapability.EFFERVESCENCE_CAPABILITY).map(cap -> {
             if(cap.consume(50))
             {
                 Vec3d lookVec = player.getLookVec();
+                int multiplier = 11;
                 for(int i = 0; i < 10; i++)
                 {
-                    world.addEntity(new FireballEntity(world, player, lookVec.x, lookVec.y, lookVec.z));
+                    FireballEntity ball = new FireballEntity(world, player, lookVec.x * multiplier, lookVec.y * multiplier, lookVec.z * multiplier);
+                    ball.setPosition(player.getPosX() + lookVec.x * 4.0D, player.getPosYHeight(0.5D) + 0.5D, player.getPosZ() + lookVec.z * 4.0D);
+                    world.addEntity(ball);
+                    multiplier -= 1;
                 }
                 stack.setCount(stack.getCount() - 1);
                 return ActionResult.resultConsume(stack);
@@ -43,7 +42,6 @@ public class LooseCannonScroll extends Item
                 Exceed.LOG.info("Player did not have enough Effervescence!");
                 return ActionResult.resultFail(stack);
             }
-        }
-        return super.onItemRightClick(world, player, hand);
+        }).orElse(super.onItemRightClick(world, player, hand));
     }
 }

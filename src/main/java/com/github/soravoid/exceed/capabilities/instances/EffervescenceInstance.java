@@ -2,6 +2,7 @@ package com.github.soravoid.exceed.capabilities.instances;
 
 import com.github.soravoid.exceed.capabilities.interfaces.IEffervescence;
 import com.github.soravoid.exceed.events.ExceedEvents;
+import com.github.soravoid.exceed.render.RenderEffervescenceBar;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -48,6 +49,7 @@ public class EffervescenceInstance implements IEffervescence
     {
         this.maxEffervescence = maxEffervescence;
         MinecraftForge.EVENT_BUS.post(new ExceedEvents.EffervescenceChangedEvent(player));
+        RenderEffervescenceBar.timeSinceLastUpdate = 0;
     }
 
     public void setEffervescencesSilent(int maxEffervescence, int current)
@@ -64,6 +66,7 @@ public class EffervescenceInstance implements IEffervescence
         {
             this.effervescence -= value;
             MinecraftForge.EVENT_BUS.post(new ExceedEvents.EffervescenceChangedEvent(player));
+            RenderEffervescenceBar.timeSinceLastUpdate = 0;
             return true;
         }
     }
@@ -74,6 +77,7 @@ public class EffervescenceInstance implements IEffervescence
         if(value + effervescence > maxEffervescence) this.effervescence = maxEffervescence;
         else this.effervescence += value;
         MinecraftForge.EVENT_BUS.post(new ExceedEvents.EffervescenceChangedEvent(player));
+        RenderEffervescenceBar.timeSinceLastUpdate = 0;
     }
 
     public static class Storage implements Capability.IStorage<IEffervescence>
