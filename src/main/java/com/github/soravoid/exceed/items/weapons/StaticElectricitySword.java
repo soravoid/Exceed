@@ -2,37 +2,34 @@ package com.github.soravoid.exceed.items.weapons;
 
 import com.github.soravoid.exceed.Exceed;
 import com.github.soravoid.exceed.capabilities.ChargesCapability;
-import com.github.soravoid.exceed.capabilities.SmithQualityCapability;
 import com.github.soravoid.exceed.capabilities.interfaces.ICharges;
-import com.github.soravoid.exceed.capabilities.interfaces.ISmithQuality;
-import com.github.soravoid.exceed.items.ExceedSword;
-import com.github.soravoid.exceed.items.ExceedTiers;
+import com.github.soravoid.exceed.items.tools.ExceedSword;
+import com.github.soravoid.exceed.items.tools.ExceedTiers;
 import com.github.soravoid.exceed.network.ExceedPacketHandler;
 import com.github.soravoid.exceed.network.capabilities.ChargePacket;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkDirection;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid = Exceed.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StaticElectricitySword extends ExceedSword implements IChargeable
 {
     public StaticElectricitySword()
     {
         //TODO Adjust damage and speed values, these are placeholders from Items.DIAMOND_SWORD
-        super(ExceedTiers.EXCEED, 3, -2.4F, new Item.Properties().group(Exceed.EXCEED_TAB));
+        super(ExceedTiers.EXCEED, 3, -3.2f, new Item.Properties().group(Exceed.EXCEED_TAB));
 
         this.addPropertyOverride(new ResourceLocation(Exceed.MODID, "charges"), (stack, world, entity) -> {
             ICharges cap = stack.getCapability(ChargesCapability.CHARGES_CAPABILITY).orElse(null);
@@ -41,33 +38,45 @@ public class StaticElectricitySword extends ExceedSword implements IChargeable
         });
     }
 
-    @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
+    @SubscribeEvent
+    public static void onLivingHurt(AttackEntityEvent e)
     {
-        if(attacker instanceof PlayerEntity)
+        ItemStack stack = e.getPlayer().getHeldItem(Hand.MAIN_HAND);
+        if(stack.getItem() instanceof StaticElectricitySword)
         {
-            PlayerEntity player = (PlayerEntity) attacker;
-            ICharges cap = stack.getCapability(ChargesCapability.CHARGES_CAPABILITY).orElse(null);
-            if(cap != null)
+            if(e.getPlayer().getCooledAttackStrength(0) == 1.0f)
             {
-                if(cap.getCharges() < 3)
+                ICharges cap = stack.getCapability(ChargesCapability.CHARGES_CAPABILITY).orElse(null);
+                if(cap != null)
                 {
-                    cap.addCharges(1);
-                    if(!player.world.isRemote) ExceedPacketHandler.INSTANCE.sendTo(new ChargePacket(cap.getCharges()), ((ServerPlayerEntity)player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-                }
-                else
-                {
-                    World world = target.getEntityWorld();
-                    LightningBoltEntity bolton = new LightningBoltEntity(target.getEntityWorld(), target.getPosX(), target.getPosY(), target.getPosZ(), false);
-                    cap.discharge();
-                    if(!player.world.isRemote)
+                    if(cap.getCharges() < 3)
                     {
-                        ExceedPacketHandler.INSTANCE.sendTo(new ChargePacket(cap.getCharges()), ((ServerPlayerEntity)player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-                        ((ServerWorld)world).addLightningBolt(bolton);
+                        cap.addCharges(1);
+                        if(!e.getPlayer().world.isRemote) ExceedPacketHandler.INSTANCE.sendTo(new ChargePacket(cap.getCharges()), ((ServerPlayerEntity)e.getPlayer()).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+                    }
+                    else
+                    {
+                        World world = e.getEntityLiving().getEntityWorld();
+                        List<LightningBoltEntity> boltons = new ArrayList<>();
+                        for(int x = -1; x < 2; x++)
+                        {
+                            for(int z = -1; z < 2; z++)
+                            {
+                                boltons.add(new LightningBoltEntity(world, e.getEntityLiving().getPosX() + x, e.getEntityLiving().getPosY(), e.getEntityLiving().getPosZ() + z, false));
+                            }
+                        }
+                        cap.discharge();
+                        if(!e.getPlayer().world.isRemote)
+                        {
+                            ExceedPacketHandler.INSTANCE.sendTo(new ChargePacket(cap.getCharges()), ((ServerPlayerEntity)e.getPlayer()).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+                            for(int i = 0; i < boltons.size(); i++)
+                            {
+                                ((ServerWorld)world).addLightningBolt(boltons.get(i));
+                            }
+                        }
                     }
                 }
             }
         }
-        return true;
     }
 }

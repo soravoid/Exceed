@@ -28,14 +28,4 @@ public class ChargesCapability implements ICapabilitySerializable<IntNBT>
 
     @Override
     public IntNBT serializeNBT() { return (IntNBT) CHARGES_CAPABILITY.getStorage().writeNBT(CHARGES_CAPABILITY, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null); }
-
-    public static class Storage implements Capability.IStorage<ICharges>
-    {
-        @Nullable
-        @Override
-        public INBT writeNBT(Capability<ICharges> capability, ICharges instance, Direction side) { return IntNBT.valueOf(instance.getCharges()); }
-
-        @Override
-        public void readNBT(Capability<ICharges> capability, ICharges instance, Direction side, INBT nbt) { instance.setCharges(((IntNBT) nbt).getInt()); }
-    }
 }

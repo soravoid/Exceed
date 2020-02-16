@@ -1,11 +1,13 @@
 package com.github.soravoid.exceed.util;
 
+import net.minecraft.util.text.TextFormatting;
+
 public enum SmithQuality
 {
-    SHARP("Sharp"), // % increase in damage
-    CHARRED("Charred"), // Fire damage and/or set target on fire
-    DULL("Dull"), // % or flat decrease in damage
-    RISKY("Risky"), // Chance for self-damage, but more dmg output
+    SHARP(TextFormatting.AQUA + "Sharp"), // % increase in damage
+    CHARRED(TextFormatting.DARK_RED + "Charred"), // Fire damage and/or set target on fire
+    DULL(TextFormatting.GRAY + "Dull"), // % or flat decrease in damage
+    RISKY(TextFormatting.RED + "Risky"), // Chance for self-damage, but more dmg output
     ;
 
     String name;

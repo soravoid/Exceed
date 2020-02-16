@@ -1,4 +1,4 @@
-package com.github.soravoid.exceed.items;
+package com.github.soravoid.exceed.items.tools;
 
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Items;
@@ -6,7 +6,7 @@ import net.minecraft.item.crafting.Ingredient;
 
 public enum ExceedTiers implements IItemTier
 {
-    EXCEED(3.0F, 8.0F, 10, 3, 1561, Ingredient.fromItems(Items.DIAMOND)), //Placeholder
+    EXCEED(3.0F, 8.0F, 10, 3, 1561, Ingredient.fromItems(Items.DIAMOND)), //Placeholder, Same as Diamond
     ;
 
     float atkDmg, eff;
@@ -25,31 +25,31 @@ public enum ExceedTiers implements IItemTier
 
     @Override
     public float getAttackDamage() {
-        return 0;
+        return atkDmg;
     }
 
     @Override
     public float getEfficiency() {
-        return 0;
+        return eff;
     }
 
     @Override
     public Ingredient getRepairMaterial() {
-        return null;
+        return repairItem;
     }
 
     @Override
     public int getEnchantability() {
-        return 0;
+        return enchant;
     }
 
     @Override
     public int getHarvestLevel() {
-        return 0;
+        return hvrstLvl;
     }
 
     @Override
     public int getMaxUses() {
-        return 0;
+        return dura;
     }
 }

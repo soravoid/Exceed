@@ -1,6 +1,12 @@
 {
-  "item.exceed.test_item": "Test Item",
   "itemGroup.exceed": "Exceed",
-  "block.exceed.test_block": "Test Block",
-  "item.exceed.static_sword": "Sword of Static Electricity"
+  "item.exceed.static_sword": "Sword of Static Electricity",
+  "item.exceed.hellfire_sword": "Hellfire Sword",
+  "block.exceed.tethered_ore": "Tethered Ore",
+  "item.exceed.tethered_ingot": "Tethered Ingot",
+  "item.exceed.tethered_helmet": "Tethered Helmet",
+  "item.exceed.tethered_chestplate": "Tethered Chestplate",
+  "item.exceed.tethered_leggings": "Tethered Leggings",
+  "item.exceed.tethered_boots": "Tethered Boots",
+  "item.exceed.loose_cannon_scroll": "Scroll of Loose Cannon"
 }

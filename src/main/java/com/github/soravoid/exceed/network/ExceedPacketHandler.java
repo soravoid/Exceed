@@ -2,6 +2,7 @@ package com.github.soravoid.exceed.network;
 
 import com.github.soravoid.exceed.Exceed;
 import com.github.soravoid.exceed.network.capabilities.ChargePacket;
+import com.github.soravoid.exceed.network.capabilities.EffervescencePacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -21,5 +22,6 @@ public class ExceedPacketHandler
         int id = 0;
 
         INSTANCE.registerMessage(id++, ChargePacket.class, ChargePacket::encode, ChargePacket::decode, ChargePacket::handle);
+        INSTANCE.registerMessage(id++, EffervescencePacket.class, EffervescencePacket::encode, EffervescencePacket:: decode, EffervescencePacket::handle);
     }
 }

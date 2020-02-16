@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "exceed:item/test_item"
+    "layer0": "exceed:item/tethered_ingot"
   }
 }

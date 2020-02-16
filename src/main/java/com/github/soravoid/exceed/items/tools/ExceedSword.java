@@ -1,8 +1,7 @@
-package com.github.soravoid.exceed.items;
+package com.github.soravoid.exceed.items.tools;
 
 import com.github.soravoid.exceed.capabilities.SmithQualityCapability;
 import com.github.soravoid.exceed.capabilities.interfaces.ISmithQuality;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -27,8 +26,8 @@ public class ExceedSword extends SwordItem implements IExceedTool
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-        //TODO Take into account modifiers from Smith Quality
+        Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
+        //TODO Take into account Smith Qualities
         return multimap;
     }
 

@@ -191,7 +191,7 @@ Build: 1.15.1-30.0.35 - Tue Jan 07 22:58:54 GMT 2020
 =========
 Build: 1.15.1-30.0.33 - Tue Jan 07 22:20:46 GMT 2020
 	richard:
-		Add support for custom nether portal frame blocks (#6389)
+		Add support for custom nether portal frame com.github.soravoid.exceed.blocks (#6389)
 
 =========
 Build: 1.15.1-30.0.32 - Tue Jan 07 21:22:49 GMT 2020

@@ -31,13 +31,5 @@ public class SmithQualityCapability implements ICapabilitySerializable<IntNBT>
     @Override
     public void deserializeNBT(IntNBT nbt) { SMITH_QUALITY_CAPABILITY.getStorage().readNBT(SMITH_QUALITY_CAPABILITY, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null, nbt); }
 
-    public static class Storage implements Capability.IStorage<ISmithQuality>
-    {
-        @Nullable
-        @Override
-        public INBT writeNBT(Capability<ISmithQuality> capability, ISmithQuality instance, Direction side) { return IntNBT.valueOf(instance.getQuality().ordinal()); }
 
-        @Override
-        public void readNBT(Capability<ISmithQuality> capability, ISmithQuality instance, Direction side, INBT nbt) { instance.setQuality(SmithQuality.values()[((IntNBT)nbt).getInt()]); }
-    }
 }

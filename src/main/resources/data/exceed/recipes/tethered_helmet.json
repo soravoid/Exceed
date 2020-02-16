@@ -1,0 +1,17 @@
+
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "i i",
+    "   "
+  ],
+  "key": {
+    "i": {
+      "item": "exceed:tethered_ingot"
+    }
+  },
+  "result": {
+    "item": "exceed:tethered_helmet"
+  }
+}
